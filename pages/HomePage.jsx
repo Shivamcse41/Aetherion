@@ -9,7 +9,7 @@ export default function HomePage() {
 
   // Modal and Toast State
   const [selectedInternship, setSelectedInternship] = useState(null);
-  const [applyForm, setApplyForm] = useState({ name: '', email: '', college: '', year: '3rd Year', resume: '' });
+  const [applyForm, setApplyForm] = useState({ name: '', email: '', college: '', year: '3rd Year' });
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -94,7 +94,7 @@ export default function HomePage() {
 
   const handleOpenApply = (internship) => {
     setSelectedInternship(internship);
-    setApplyForm({ name: '', email: '', college: '', year: '3rd Year', resume: '' });
+    setApplyForm({ name: '', email: '', college: '', year: '3rd Year' });
   };
 
   const handleCloseApply = () => {
@@ -562,17 +562,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1.5">Resume / Portfolio Link</label>
-                <input
-                  type="url"
-                  required
-                  value={applyForm.resume}
-                  onChange={(e) => setApplyForm({ ...applyForm, resume: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
-                  placeholder="e.g. https://drive.google.com/resume-link"
-                />
-              </div>
+              {/* Resume / Portfolio Link removed */}
 
               <div className="flex justify-end gap-3 pt-2">
                 <button
