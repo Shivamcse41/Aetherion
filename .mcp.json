@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=caffdf6b-fe01-441b-959b-fc61833e8787"
+    }
+  }
+}
