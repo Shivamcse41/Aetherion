@@ -70,25 +70,25 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="py-20 md:py-28 bg-zinc-950 text-zinc-100 flex items-center justify-center min-h-[calc(100vh-4rem)]">
+    <main className="py-20 md:py-28 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex items-center justify-center min-h-[calc(100vh-4rem)] transition-colors duration-300">
       <div className="w-full max-w-md mx-auto px-4">
-        <div className="relative overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950 p-6 sm:p-8 shadow-2xl">
-          <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-6 sm:p-8 shadow-xl shadow-slate-100/40 dark:shadow-none transition-colors duration-300">
+          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-transparent pointer-events-none"></div>
 
           {/* Heading */}
           <div className="relative text-center mb-8">
-            <h1 className="text-xl sm:text-2xl font-black text-white uppercase tracking-wider mb-2">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-wider mb-2">
               {isLogin ? 'Aetherion Login' : 'Register Profile'}
             </h1>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               {isLogin ? "Sign in to track your applications and training courses" : "Register to start applying for internships"}
             </p>
           </div>
 
           {!isSupabaseConfigured && (
-            <div className="p-4 rounded-xl text-xs font-semibold mb-6 border bg-amber-500/10 border-amber-500/20 text-amber-300">
-              Supabase is not connected. Add <code className="text-amber-200">VITE_SUPABASE_URL</code> and{' '}
-              <code className="text-amber-200">VITE_SUPABASE_ANON_KEY</code> in <code className="text-amber-200">.env.local</code>, then restart the dev server.
+            <div className="p-4 rounded-xl text-xs font-semibold mb-6 border bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-300">
+              Supabase is not connected. Add <code className="text-amber-700 dark:text-amber-200">VITE_SUPABASE_URL</code> and{' '}
+              <code className="text-amber-700 dark:text-amber-200">VITE_SUPABASE_ANON_KEY</code> in <code className="text-amber-700 dark:text-amber-200">.env.local</code>, then restart the dev server.
             </div>
           )}
 
@@ -96,25 +96,25 @@ export default function LoginPage() {
           {message.text && (
             <div className={`p-4 rounded-xl text-xs font-semibold mb-6 border ${
               message.type === 'success' 
-                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
-                : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' 
+                : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
             }`}>
               {message.text}
             </div>
           )}
 
           {/* Role Toggle */}
-          <div className="relative grid grid-cols-2 gap-2 p-1.5 bg-zinc-900 border border-zinc-800 rounded-xl mb-6">
+          <div className="relative grid grid-cols-2 gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl mb-6">
             {['Student', 'Company'].map((role) => (
               <button
                 key={role}
                 type="button"
                 onClick={() => setFormData({ ...formData, role })}
                 disabled={loading}
-                className={`py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors ${
+                className={`py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${
                   formData.role === role
-                    ? 'bg-amber-400 text-zinc-950'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                    ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                 } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 For {role}s
@@ -126,7 +126,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="relative space-y-5">
             {!isLogin && (
               <div>
-                <label htmlFor="fullname" className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
+                <label htmlFor="fullname" className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">
                   Full Name
                 </label>
                 <input
@@ -136,14 +136,14 @@ export default function LoginPage() {
                   disabled={loading}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 disabled:opacity-50"
+                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
                   placeholder="e.g. Suman Sen"
                 />
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
+              <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">
                 Email Address
               </label>
               <input
@@ -153,13 +153,13 @@ export default function LoginPage() {
                 disabled={loading}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 disabled:opacity-50"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
                 placeholder="student@domain.com"
               />
             </div>
 
             <div>
-              <label htmlFor="pass" className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
+              <label htmlFor="pass" className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">
                 Password
               </label>
               <input
@@ -169,7 +169,7 @@ export default function LoginPage() {
                 disabled={loading}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 disabled:opacity-50"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 disabled:opacity-50"
                 placeholder="••••••••"
               />
             </div>
@@ -177,24 +177,24 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full inline-flex items-center justify-center text-xs font-bold uppercase tracking-widest text-zinc-950 bg-amber-400 hover:bg-amber-300 rounded-lg py-3 shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full inline-flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg py-3 shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Authenticating...' : (isLogin ? 'Sign In' : 'Sign Up')}
             </button>
 
             <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-zinc-900"></div>
-              <span className="flex-shrink mx-3 text-[9px] font-bold text-zinc-500 uppercase tracking-widest">or</span>
-              <div className="flex-grow border-t border-zinc-900"></div>
+              <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+              <span className="flex-shrink mx-3 text-[9px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest">or</span>
+              <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
             </div>
 
             <button
               type="button"
               disabled={loading}
               onClick={handleGoogleSignIn}
-              className="w-full inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-200 bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800/80 rounded-lg py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-800/80 rounded-lg py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <svg className="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -205,7 +205,7 @@ export default function LoginPage() {
           </form>
 
           {/* Toggle Screen */}
-          <div className="relative mt-6 text-center text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+          <div className="relative mt-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-500">
             {isLogin ? (
               <p>
                 Don't have an account?{' '}
@@ -215,7 +215,7 @@ export default function LoginPage() {
                     setMessage({ text: '', type: '' });
                   }} 
                   disabled={loading}
-                  className="text-amber-500 hover:underline disabled:opacity-50"
+                  className="text-indigo-600 dark:text-indigo-400 hover:underline disabled:opacity-50"
                 >
                   Register now
                 </button>
@@ -229,7 +229,7 @@ export default function LoginPage() {
                     setMessage({ text: '', type: '' });
                   }} 
                   disabled={loading}
-                  className="text-amber-500 hover:underline disabled:opacity-50"
+                  className="text-indigo-600 dark:text-indigo-400 hover:underline disabled:opacity-50"
                 >
                   Sign in
                 </button>

@@ -37,3 +37,8 @@ skills-lock.json
 
 
 .vercel
+
+# Temp Git Tools
+.git-tools/
+.git-tools.zip
+pages/HomePage_step81.jsx
