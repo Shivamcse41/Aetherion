@@ -31,6 +31,33 @@ export default function DashboardPage() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
+  // Lock Student Dashboard if student is not logged in
+  if (!user) {
+    return (
+      <main className="py-20 md:py-28 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 sm:p-10 rounded-3xl shadow-soft-lg space-y-6">
+          <div className="w-16 h-16 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-purple-500/20">
+            <ShieldCheck className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-wider mb-2 font-serif">
+              Student Dashboard Locked
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+              This portal is restricted to authorized students only. Please log in or create an account to access your personal profile, enrolled courses, and certificates.
+            </p>
+          </div>
+          <Link
+            to="/login"
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-widest shadow-lg shadow-purple-600/30 transition cursor-pointer"
+          >
+            <span>Login / Register Account</span>
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
