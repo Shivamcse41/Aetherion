@@ -36,7 +36,7 @@ export default function AboutPage() {
       role: 'Backend Developer Intern',
       image: ayushPhoto,
       quote: "As a Backend Developer Intern, I'm constantly learning and contributing to real-world projects while gaining hands-on experience in building modern web applications and improving platform functionality.",
-      linkedin: 'https://linkedin.com'
+      linkedin: 'https://www.linkedin.com/in/ayush-kumar-verma-695230424?utm_source=share_via&utm_content=profile&utm_medium=member_android'
     },
     {
       name: 'Deepika Kumari',
