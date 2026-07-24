@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import certificateImg from '../Certificate.jpg';
+import { Search, ShieldCheck, Download, Award, CheckCircle2, AlertCircle, Printer } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function CertificatesPage() {
   const [certId, setCertId] = useState('');
@@ -79,206 +81,146 @@ export default function CertificatesPage() {
   };
 
   return (
-    <main className="py-20 md:py-28 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300 print:bg-white print:py-0 print:text-black">
+    <main className="py-12 md:py-20 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300 print:bg-white print:py-0 print:text-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 print:p-0">
         
-        {/* Header (Hidden on Print) */}
-        <div className="text-center max-w-3xl mx-auto mb-12 print:hidden animate-in fade-in duration-300">
-          <span className="text-xs font-bold text-indigo-655 dark:text-indigo-400 tracking-widest uppercase bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Official Verification</span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-4 mb-6 leading-tight">
-            Verify MSME Standard <span className="glowing-text">Certifications</span>
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-12 print:hidden">
+          <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-widest uppercase bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
+            Official Credential Verification
+          </span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-4 mb-4">
+            Verify MSME Certifications
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed uppercase tracking-wider font-semibold">
-            All Aetherion training programs offer official, verifiable certifications complying with Indian university norms.
+          <p className="text-xs sm:text-sm text-slate-500 font-medium">
+            All Aetherion training programs offer official, verifiable certifications complying with university norms.
           </p>
         </div>
 
-        {/* Certificate Search Module (Hidden on Print) */}
-        <div className="max-w-xl mx-auto mb-16 print:hidden">
-          <div className="premium-card p-6 rounded-2xl">
+        {/* Search Input Box */}
+        <div className="max-w-xl mx-auto mb-12 print:hidden">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl shadow-soft-md">
             <form onSubmit={handleSearch} className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-2.5">
-                  Enter Certificate ID / Tracking No.
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
+                  Enter Certificate Serial ID
                 </label>
-                <div className="flex gap-3">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-4 top-3.5 text-purple-500" />
                   <input
                     type="text"
-                    required
                     value={certId}
                     onChange={(e) => setCertId(e.target.value)}
                     placeholder="e.g. ATH-2026-8849"
-                    className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 font-mono transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs font-mono text-slate-900 dark:text-white uppercase focus:outline-none focus:border-purple-600"
                   />
-                  <button
-                    type="submit"
-                    className="premium-btn px-6 py-3 rounded-lg text-xs"
-                  >
-                    Verify
-                  </button>
                 </div>
               </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2"
+              >
+                <span>Verify Credentials</span>
+                <ShieldCheck className="w-4 h-4" />
+              </button>
             </form>
 
-            {/* Error Message */}
-            {errorMsg && (
-              <div className="mt-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5 text-xs text-red-600 dark:text-red-400 leading-relaxed font-semibold">
-                ⚠ {errorMsg}
-              </div>
-            )}
+            <div className="mt-4 flex items-center justify-center gap-2 text-[10px] font-mono text-slate-400">
+              <span>Sample ID:</span>
+              <button
+                type="button"
+                onClick={() => setCertId('ATH-2026-8849')}
+                className="underline hover:text-purple-600 font-bold"
+              >
+                ATH-2026-8849
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Dynamic Verified Results Container */}
-        {certificateData ? (
-          <div className="space-y-12 animate-in fade-in duration-300">
-            {/* Details Panel (Hidden on Print) */}
-            <div className="max-w-4xl mx-auto premium-card rounded-2xl p-6 sm:p-8 print:hidden">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-850">
-                <div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
-                    ✓ Authenticity Verified
-                  </span>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mt-3">Certificate Record Found</h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">ID: <span className="font-mono font-bold text-slate-700 dark:text-slate-300">{searchedId}</span></p>
-                </div>
-                <div>
-                  <button
-                    onClick={handlePrint}
-                    className="premium-btn px-6 py-3 rounded-lg text-xs"
-                  >
-                    🖨 Print / Download PDF
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6">
-                <div>
-                  <span className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Candidate Name</span>
-                  <span className="text-sm font-black text-slate-850 dark:text-white">{certificateData.name}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Program & Track</span>
-                  <span className="text-sm font-black text-slate-850 dark:text-white">{certificateData.program}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Duration</span>
-                  <span className="text-sm font-black text-slate-850 dark:text-white">{certificateData.duration}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Secured Grade</span>
-                  <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">{certificateData.grade}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Print Viewable Certificate Frame */}
-            <div className="max-w-4xl mx-auto flex justify-center">
-              <div className="w-full relative rounded-2xl border-8 border-double border-indigo-900 bg-white p-8 sm:p-14 text-slate-900 shadow-2xl overflow-hidden aspect-[1.414/1] flex flex-col justify-between items-center text-center">
-                {/* Background Watermark/Logo */}
-                <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-25"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full border border-indigo-500/[0.04] bg-indigo-500/[0.02] flex items-center justify-center pointer-events-none select-none">
-                  <span className="text-[90px] font-black text-indigo-900/5 select-none uppercase tracking-wider font-mono">AETHERION</span>
-                </div>
-
-                {/* Certificate Content */}
-                <div className="space-y-4 relative z-10 w-full">
-                  <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-widest border-b border-indigo-200 pb-1 px-4">
-                      MSME Government Registered Enterprise • India
-                    </span>
-                    <h2 className="text-2xl sm:text-4xl font-serif font-black tracking-wider text-indigo-950 mt-4 uppercase">
-                      Certificate of Completion
-                    </h2>
-                    <p className="text-[10px] text-slate-500 italic mt-1.5 uppercase tracking-widest">
-                      This is officially presented to
-                    </p>
-                  </div>
-
-                  <div className="py-2.5">
-                    <h3 className="text-2xl sm:text-3xl font-serif font-bold text-indigo-900 border-b-2 border-indigo-900/10 inline-block px-10 italic">
-                      {certificateData.name}
-                    </h3>
-                  </div>
-
-                  <div className="max-w-2xl mx-auto text-xs sm:text-sm text-slate-600 leading-relaxed space-y-1">
-                    <p>
-                      for successfully completing the **{certificateData.type}** in
-                    </p>
-                    <p className="font-bold text-slate-800 text-sm sm:text-base">
-                      {certificateData.program}
-                    </p>
-                    <p>
-                      conducted for a duration of <span className="font-bold text-slate-850">{certificateData.duration}</span>.
-                      The participant has successfully completed all tasks, practical challenges, and evaluations, achieving an overall Grade **{certificateData.grade}**.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer Signatures */}
-                <div className="w-full grid grid-cols-3 gap-6 items-end relative z-10 pt-8 border-t border-slate-100">
-                  <div className="text-left">
-                    <p className="text-[9px] text-slate-500 font-mono">ID: {searchedId}</p>
-                    <p className="text-[9px] text-slate-500 mt-1">Issue Date: {certificateData.issueDate}</p>
-                  </div>
-
-                  <div className="flex justify-center">
-                    {/* Simulated MSME / QR Verification Badge */}
-                    <div className="h-14 w-14 border border-indigo-900/20 bg-indigo-50/50 flex flex-col items-center justify-center p-1 rounded">
-                      <div className="h-full w-full bg-slate-900 flex items-center justify-center text-white text-[8px] font-bold p-0.5 rounded">
-                        QR CODE
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="text-right flex flex-col items-end">
-                    <span className="font-serif italic text-indigo-900 text-sm tracking-wide">Prince Raj</span>
-                    <span className="h-0.5 w-24 bg-indigo-900/20 my-1"></span>
-                    <p className="text-[9px] font-bold text-slate-655 uppercase tracking-widest">Founder & CEO</p>
-                    <p className="text-[8px] text-slate-400">Aetherion Inc.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          /* Default Landing Panel (Hidden on Print) */
-          <div className="max-w-4xl mx-auto border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 rounded-2xl overflow-hidden p-8 sm:p-12 relative mb-16 shadow-xl shadow-slate-100/40 dark:shadow-none transition-colors duration-300 print:hidden">
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-transparent pointer-events-none"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-6">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-[10px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
-                  ★ ISO 9001:2015 & MSME Registered
-                </span>
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Valid & Verifiable Nationwide</h2>
-                <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed">
-                  Every student receives a digital certificate with a unique tracking identifier. Recruiters or academic counselors can verify validity instantaneously through our tracking server.
-                </p>
-                <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
-                  <li className="flex items-center gap-2">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">✓</span> Dynamic QR Code Integration
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">✓</span> Verified Academic Credits Listing
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">✓</span> Direct Integration with LinkedIn Licenses
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="flex justify-center">
-                <div className="relative w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden shadow-2xl group hover:border-indigo-500/30 dark:hover:border-indigo-500/30 transition-all duration-350 hover:scale-[1.02]">
-                  <img 
-                    src={certificateImg} 
-                    alt="Aetherion Certification Sample" 
-                    className="w-full h-auto select-none pointer-events-none"
-                  />
-                </div>
-              </div>
-            </div>
+        {/* Error Notification */}
+        {errorMsg && (
+          <div className="max-w-xl mx-auto mb-12 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-3 print:hidden">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span>{errorMsg}</span>
           </div>
         )}
+
+        {/* Certificate Display Result */}
+        {certificateData && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-4xl mx-auto space-y-6"
+          >
+            {/* Top Verification Badge Bar */}
+            <div className="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between text-emerald-600 dark:text-emerald-400 print:hidden">
+              <div className="flex items-center gap-2 text-xs font-bold">
+                <CheckCircle2 className="w-5 h-5" />
+                <span>OFFICIALLY VERIFIED RECORD ({searchedId})</span>
+              </div>
+              <button
+                onClick={handlePrint}
+                className="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 transition flex items-center gap-2 shadow"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print / Save PDF</span>
+              </button>
+            </div>
+
+            {/* Certificate Preview Document Container */}
+            <div className="bg-white text-slate-900 border-8 border-purple-900 p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden text-center print:border-4 print:shadow-none">
+              
+              {/* Background Watermark Symbol */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none font-serif text-[180px] font-black text-purple-900">
+                \( \tau i \)
+              </div>
+
+              {/* Certificate Header */}
+              <div className="relative mb-8">
+                <div className="w-16 h-16 rounded-full bg-purple-900 text-white flex items-center justify-center mx-auto mb-4 font-serif text-2xl font-bold">
+                  \( \tau i \)
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-widest text-purple-900">
+                  CERTIFICATE OF COMPLETION
+                </h2>
+                <p className="text-xs text-purple-700 font-bold uppercase tracking-wider mt-1">
+                  Aetherion Industrial Training & Internship Portal
+                </p>
+              </div>
+
+              {/* Body */}
+              <div className="relative space-y-4 my-8">
+                <p className="text-xs text-slate-500 font-serif italic">This is to certify that</p>
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-serif underline decoration-purple-500 decoration-2 underline-offset-8">
+                  {certificateData.name}
+                </h3>
+                <p className="text-xs text-slate-600 max-w-lg mx-auto leading-relaxed">
+                  has successfully completed the industrial program in <strong>{certificateData.program}</strong> for a duration of <strong>{certificateData.duration}</strong> with grade <strong>{certificateData.grade}</strong>.
+                </p>
+              </div>
+
+              {/* Footer Meta */}
+              <div className="relative pt-8 border-t border-purple-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-4">
+                <div>
+                  <span className="block font-bold text-slate-400 text-[10px] uppercase">Issue Date</span>
+                  <span className="font-semibold">{certificateData.issueDate}</span>
+                </div>
+                <div>
+                  <span className="block font-bold text-slate-400 text-[10px] uppercase">Credential ID</span>
+                  <span className="font-mono font-bold text-purple-900">{searchedId}</span>
+                </div>
+                <div>
+                  <span className="block font-bold text-slate-400 text-[10px] uppercase">Authorized Signatory</span>
+                  <span className="font-serif font-bold text-purple-900">Prince Raj (Founder)</span>
+                </div>
+              </div>
+
+            </div>
+          </motion.div>
+        )}
+
       </div>
     </main>
   );

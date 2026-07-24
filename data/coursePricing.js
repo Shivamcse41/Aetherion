@@ -3,6 +3,7 @@
  * Keep in sync with pages/CoursePage.jsx course data.
  */
 export const COURSE_PRICING = {
+  0: { price: 1 },
   1: { price: 1999 },
   2: { price: 1999 },
   3: { price: 5999 },

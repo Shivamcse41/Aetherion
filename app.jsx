@@ -8,6 +8,7 @@ import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import ServicesPage from './pages/ServicesPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsPage from './pages/TermsPage';
 import HelpPage from './pages/HelpPage';
 import InternshipPage from './pages/InternshipPage';
 import CertificatesPage from './pages/CertificatesPage';
@@ -50,13 +51,14 @@ export default function App() {
             <Route path="/" element={<Layout><HomePage /></Layout>} />
             <Route path="/internship" element={<Layout><InternshipPage /></Layout>} />
             <Route path="/certificates" element={<Layout><CertificatesPage /></Layout>} />
-            <Route path="/services" element={<Layout><ServicesPage /></Layout>} />
+            <Route path="/services" element={<Layout><InternshipPage /></Layout>} />
             <Route path="/about" element={<Layout><AboutPage /></Layout>} />
             <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
             <Route path="/auth/callback" element={<AuthCallbackPage />} />
             <Route path="/login" element={<Layout><LoginPage /></Layout>} />
             <Route path="/dashboard" element={<Layout><DashboardPage /></Layout>} />
             <Route path="/privacy" element={<Layout><PrivacyPolicyPage /></Layout>} />
+            <Route path="/terms" element={<Layout><TermsPage /></Layout>} />
             <Route path="/help" element={<Layout><HelpPage /></Layout>} />
             <Route path="/payment/success" element={<Layout><PaymentResultPage status="success" /></Layout>} />
             <Route path="/payment/failure" element={<Layout><PaymentResultPage status="failure" /></Layout>} />

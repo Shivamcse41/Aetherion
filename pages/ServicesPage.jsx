@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { Search, Sparkles, Star, Calendar, Tag, ShieldCheck, ArrowRight, CheckCircle2, Share2, Layers, Smartphone, Layout, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ServicesPage() {
+  const [selectedYearFilter, setSelectedYearFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [inquiryForm, setInquiryForm] = useState({
     name: '',
     email: '',
@@ -23,17 +28,78 @@ export default function ServicesPage() {
   });
   const [timeline, setTimeline] = useState('1-2 months'); // 2-4 weeks, 1-2 months, 3+ months
 
+  const coursesList = [
+    {
+      id: 'c1',
+      title: '3rd Year Combo (CSE/IT)',
+      subtitle: 'Software Engineering + OS + Compiler Design + AI + OOPs',
+      year: '3rd Year',
+      type: 'ONLINE',
+      offerBadge: 'BUMPER OFFER!! ALL 6 IN 1 COURSE',
+      originalPrice: 3499,
+      discountPrice: 1199,
+      discountText: '65% OFF • 6 courses',
+      language: 'Hinglish',
+      rating: 4.9,
+      startsOn: '23rd July 2026',
+      endsOn: '31st December 2026',
+      fullBatch: true,
+      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&auto=format&fit=crop&q=80',
+    },
+    {
+      id: 'c2',
+      title: '2nd Year Combo (CS/IT & Allied Branches)',
+      subtitle: 'DSA + Computer Organization + Economics + Analog & Digital',
+      year: '2nd Year',
+      type: 'ONLINE',
+      offerBadge: 'BUMPER OFFER!! ALL 4 IN 1 COURSE',
+      originalPrice: 4999,
+      discountPrice: 1499,
+      discountText: '67% OFF • 4 courses',
+      language: 'Hinglish',
+      rating: 4.7,
+      startsOn: '20th July 2026',
+      endsOn: '31st December 2026',
+      fullBatch: true,
+      trending: true,
+      image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&auto=format&fit=crop&q=80',
+    },
+    {
+      id: 'c3',
+      title: '1st Year Combo (CS/IT & Allied Branches)',
+      subtitle: 'Physics + Basic Electrical Engineering (BEE) + Mathematics',
+      year: '1st Year',
+      type: 'ONLINE',
+      offerBadge: 'BUMPER OFFER!! ALL 3 IN 1 COURSE',
+      originalPrice: 3999,
+      discountPrice: 999,
+      discountText: '75% OFF • 3 courses',
+      language: 'Hinglish',
+      rating: 4.8,
+      startsOn: '20th July 2026',
+      endsOn: '31st December 2026',
+      fullBatch: true,
+      trending: true,
+      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&auto=format&fit=crop&q=80',
+    }
+  ];
+
+  const filteredCourses = coursesList.filter((c) => {
+    const matchesYear = selectedYearFilter === 'All' || c.year === selectedYearFilter;
+    const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) || c.subtitle.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesYear && matchesSearch;
+  });
+
   const handleFeatureToggle = (feature) => {
     setSelectedFeatures((prev) => ({ ...prev, [feature]: !prev[feature] }));
   };
 
-  // Dynamic cost calculation based on options
   const calculateCost = () => {
     let basePrice = 0;
     if (projectType === 'web') basePrice = 15000;
     else if (projectType === 'mobile') basePrice = 25000;
     else if (projectType === 'uiux') basePrice = 8000;
-    else basePrice = 35000; // both
+    else basePrice = 35000;
 
     let featuresPrice = 0;
     if (selectedFeatures.auth) featuresPrice += 5000;
@@ -43,8 +109,8 @@ export default function ServicesPage() {
     if (selectedFeatures.notifications) featuresPrice += 4000;
 
     let multiplier = 1.0;
-    if (timeline === '2-4 weeks') multiplier = 1.25; // Rush fee
-    if (timeline === '3+ months') multiplier = 0.9;  // Discount for long-term
+    if (timeline === '2-4 weeks') multiplier = 1.25;
+    if (timeline === '3+ months') multiplier = 0.9;
 
     const total = (basePrice + featuresPrice) * multiplier;
     return Math.round(total);
@@ -69,7 +135,6 @@ export default function ServicesPage() {
       description: `Estimated Project Details:\n- Platform: ${typeLabel}\n- Features: ${featuresList || 'Core standard setup'}\n- Timeline: ${timeline}\n- Estimated Price: ₹${cost.toLocaleString()}\n\n[Please enter any custom requirements here]`,
     }));
 
-    // Scroll smoothly to form
     const formSection = document.getElementById('inquiry-form-section');
     if (formSection) {
       formSection.scrollIntoView({ behavior: 'smooth' });
@@ -79,7 +144,6 @@ export default function ServicesPage() {
   const handleInquirySubmit = (e) => {
     e.preventDefault();
     setShowToast(true);
-    // Reset description/inputs
     setInquiryForm({
       name: '',
       email: '',
@@ -94,341 +158,353 @@ export default function ServicesPage() {
   };
 
   return (
-    <main className="py-20 md:py-28 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen relative overflow-hidden transition-colors duration-300">
+    <main className="py-12 md:py-20 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+      
       {/* Toast Notification */}
-      {showToast && (
-        <div className="fixed bottom-5 right-5 z-50 max-w-md bg-white dark:bg-slate-900 border border-indigo-500/30 text-slate-900 dark:text-white rounded-xl shadow-2xl p-4 flex gap-3 items-center animate-in fade-in slide-in-from-bottom-5 duration-300">
-          <div className="h-8 w-8 shrink-0 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm">
-            ✓
-          </div>
-          <div>
-            <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Consultation Request Received</p>
-            <p className="text-xs text-slate-550 dark:text-slate-400 mt-0.5">Thank you! Our engineering team will review your project details and contact you within 24 hours.</p>
-          </div>
-        </div>
-      )}
-
-      {/* Radial Gradient Ambient Light */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Hero Section */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-widest uppercase">
-            Development Services
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-3 mb-6 leading-tight">
-            We Build Custom Apps & Websites
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed uppercase tracking-wider font-semibold">
-            High-Performance Web and Mobile Solutions Designed by Industry Professionals. Certified Quality, Production-Ready Delivery.
-          </p>
-        </div>
-
-        {/* Services Highlight Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-          {/* Card 1: Web Development */}
-          <div className="relative rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-8 flex flex-col justify-between hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl dark:hover:bg-slate-900/60 shadow-md shadow-slate-100/40 dark:shadow-none hover:scale-[1.01] transition-all duration-300 group">
+      <AnimatePresence>
+        {showToast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-6 right-6 z-50 max-w-md bg-white dark:bg-slate-900 border border-purple-500/30 text-slate-900 dark:text-white rounded-2xl shadow-2xl p-4 flex gap-3 items-center backdrop-blur-xl"
+          >
+            <div className="h-10 w-10 shrink-0 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+              ✓
+            </div>
             <div>
-              <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-6">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Custom Web Apps</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                Full-featured custom web applications built with the MERN stack, Next.js, and modern CSS frameworks. Fast loading, responsive, and SEO-optimized out of the box.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-500 dark:text-slate-500 mb-6">
-                <li className="flex items-center gap-2">✓ React / Node / Express APIs</li>
-                <li className="flex items-center gap-2">✓ Admin Dashboards & Databases</li>
-                <li className="flex items-center gap-2">✓ SaaS & E-Commerce platforms</li>
-              </ul>
+              <p className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Request Received</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Our engineering team will review your requirements and reach out within 24 hours.</p>
             </div>
-          </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Card 2: Mobile App */}
-          <div className="relative rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-8 flex flex-col justify-between hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl dark:hover:bg-slate-900/60 shadow-md shadow-slate-100/40 dark:shadow-none hover:scale-[1.01] transition-all duration-300 group">
-            <div>
-              <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-6">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Mobile App</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                Native-performing iOS and Android applications built with React Native. Push notifications, offline support, device hardware access, and App Store publishing support.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-500 dark:text-slate-500 mb-6">
-                <li className="flex items-center gap-2">✓ iOS & Android native outputs</li>
-                <li className="flex items-center gap-2">✓ Camera, Maps & Location sync</li>
-                <li className="flex items-center gap-2">✓ Play Store & App Store deployments</li>
-              </ul>
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Card 3: UI & UX Design */}
-          <div className="relative rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-8 flex flex-col justify-between hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl dark:hover:bg-slate-900/60 shadow-md shadow-slate-100/40 dark:shadow-none hover:scale-[1.01] transition-all duration-300 group">
-            <div>
-              <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-6">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">UI & UX Design</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                Visually stunning, user-first interface design — from wireframes to polished Figma prototypes. We craft experiences that convert visitors into customers.
-              </p>
-              <ul className="space-y-2 text-xs text-slate-500 dark:text-slate-500 mb-6">
-                <li className="flex items-center gap-2">✓ Figma Wireframes & Prototypes</li>
-                <li className="flex items-center gap-2">✓ Brand Identity & Typography</li>
-                <li className="flex items-center gap-2">✓ Responsive & Accessible Design</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Interactive Pricing Estimator Section */}
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-6 sm:p-10 mb-24 relative overflow-hidden shadow-xl shadow-slate-100/40 dark:shadow-none transition-colors duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.02] to-transparent pointer-events-none"></div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            
-            {/* Calculator Toggles */}
-            <div className="lg:col-span-7 space-y-6">
-              <div>
-                <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Interactive Calculator</span>
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1.5 mb-2">Estimate Your Project Cost</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Configure your required features and timeline to view an instant development estimate.</p>
-              </div>
-
-              {/* Project Type */}
-              <div className="space-y-3">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">Platform Choice</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {[
-                    { id: 'web', label: 'Website / Web App' },
-                    { id: 'mobile', label: 'Mobile App' },
-                    { id: 'both', label: 'Web + Mobile' },
-                    { id: 'uiux', label: 'UI & UX Design' },
-                  ].map((t) => (
-                    <button
-                      key={t.id}
-                      onClick={() => setProjectType(t.id)}
-                      className={`py-3 px-2 text-[10px] font-black uppercase tracking-wider rounded-lg border transition-all text-center ${
-                        projectType === t.id
-                          ? 'border-indigo-500 bg-indigo-500/5 text-indigo-600 dark:text-indigo-400'
-                          : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30 text-slate-500 dark:text-slate-400 hover:border-slate-350 dark:hover:border-slate-700'
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Feature checkboxes */}
-              <div className="space-y-3">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">Required Features</label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {[
-                    { id: 'auth', label: 'User Auth / Login' },
-                    { id: 'payments', label: 'Payments Gateways' },
-                    { id: 'admin', label: 'Admin Dashboard' },
-                    { id: 'chat', label: 'Realtime Chat' },
-                    { id: 'notifications', label: 'Push Notifications' },
-                  ].map((feat) => (
-                    <button
-                      key={feat.id}
-                      onClick={() => handleFeatureToggle(feat.id)}
-                      className={`p-3 text-[10px] font-bold uppercase tracking-wider rounded-lg border text-left flex items-center justify-between transition-all ${
-                        selectedFeatures[feat.id]
-                          ? 'border-indigo-500/50 bg-indigo-500/5 text-indigo-600 dark:text-indigo-400'
-                          : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/10 text-slate-400 dark:text-slate-500 hover:border-slate-350 dark:hover:border-slate-700'
-                      }`}
-                    >
-                      <span>{feat.label}</span>
-                      <span>{selectedFeatures[feat.id] ? '✓' : '+'}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Timeline selector */}
-              <div className="space-y-3">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">Target Timeline</label>
-                <div className="grid grid-cols-3 gap-3">
-                  {[
-                    { val: '2-4 weeks', desc: 'Fast Track (Priority)' },
-                    { val: '1-2 months', desc: 'Standard Delivery' },
-                    { val: '3+ months', desc: 'Flexible Delivery' },
-                  ].map((t) => (
-                    <button
-                      key={t.val}
-                      onClick={() => setTimeline(t.val)}
-                      className={`py-3 px-2 rounded-lg border transition-all text-center flex flex-col justify-center items-center ${
-                        timeline === t.val
-                          ? 'border-indigo-500 bg-indigo-500/5 text-indigo-600 dark:text-indigo-400'
-                          : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/20 text-slate-500 dark:text-slate-400 hover:border-slate-350 dark:hover:border-slate-700'
-                      }`}
-                    >
-                      <span className="text-[10px] font-black uppercase tracking-wider">{t.val}</span>
-                      <span className="text-[8px] text-slate-400 dark:text-slate-500 mt-0.5">{t.desc}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Display Estimates */}
-            <div className="lg:col-span-5 h-full">
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 p-6 flex flex-col justify-between items-center text-center h-full relative">
-                <div className="space-y-4 py-6">
-                  <div className="space-y-1">
-                    <p className="text-4xl font-black text-slate-900 dark:text-white">₹{calculateCost().toLocaleString()}</p>
-                    <p className="text-[10px] text-slate-450 dark:text-slate-400 uppercase tracking-widest">Base project + features configured</p>
-                  </div>
-
-                  <div className="flex justify-center items-center gap-6 pt-4 border-t border-slate-200 dark:border-slate-855 max-w-xs mx-auto text-xs text-slate-500 dark:text-slate-400">
-                    <div>
-                      <p className="text-slate-850 dark:text-white font-bold">{timeline}</p>
-                      <p className="text-[9px] text-slate-400 dark:text-slate-550 uppercase tracking-wider">Timeline</p>
-                    </div>
-                    <div className="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
-                    <div>
-                      <p className="text-slate-850 dark:text-white font-bold">1 Year</p>
-                      <p className="text-[9px] text-slate-400 dark:text-slate-550 uppercase tracking-wider">Free Support</p>
-                    </div>
-                  </div>
-                </div>
-
+        {/* SECTION 1: COURSE CATALOG HEADER & FILTERS (Matching Image #2) */}
+        <div className="mb-12">
+          {/* Top Control Bar */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+            {/* Filter Pills */}
+            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+              {['1st Year', '2nd Year', '3rd Year', 'All'].map((yr) => (
                 <button
-                  onClick={handlePrefillInquiry}
-                  className="w-full mt-4 inline-flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg py-3.5 transition-colors shadow-md shadow-indigo-600/10 dark:shadow-none"
+                  key={yr}
+                  onClick={() => setSelectedYearFilter(yr)}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                    selectedYearFilter === yr
+                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-purple-400'
+                  }`}
                 >
-                  Prefill & Contact Team
+                  {yr === 'All' ? 'All Courses' : yr}
                 </button>
-              </div>
+              ))}
             </div>
 
+            {/* Search Input (Matching Image #2) */}
+            <div className="relative w-full md:w-80">
+              <Search className="w-4 h-4 absolute left-3.5 top-3 text-purple-500" />
+              <input
+                type="text"
+                placeholder="Search courses..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white dark:bg-slate-900 border-2 border-purple-400/40 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-purple-600 shadow-sm"
+              />
+            </div>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-black text-center text-slate-900 dark:text-white uppercase tracking-wider mb-8">
+            COMBO COURSES
+          </h2>
+
+          {/* Course Cards Grid (Matching Image #2) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {filteredCourses.map((course) => (
+              <motion.div
+                key={course.id}
+                whileHover={{ y: -6 }}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-soft-md hover:shadow-glow-purple transition-all duration-300 flex flex-col"
+              >
+                {/* Thumbnail Container */}
+                <div className="relative aspect-video bg-gradient-to-tr from-purple-950 to-slate-900 overflow-hidden">
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-full object-cover opacity-80"
+                  />
+                  
+                  {/* Top Type Pill */}
+                  <span className="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-md shadow">
+                    {course.type}
+                  </span>
+
+                  {/* Share Icon */}
+                  <button className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md text-slate-800 dark:text-white flex items-center justify-center hover:bg-purple-600 hover:text-white transition">
+                    <Share2 className="w-4 h-4" />
+                  </button>
+
+                  {/* Bumper Offer Overlay Banner */}
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 text-white text-center py-2 px-3 border-t border-purple-400/30">
+                    <span className="text-[11px] font-black tracking-wide text-yellow-300 flex items-center justify-center gap-1">
+                      🔥 {course.offerBadge}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug">
+                      {course.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">
+                      {course.subtitle}
+                    </p>
+
+                    {/* Tag Badges */}
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      {course.trending && (
+                        <span className="bg-purple-500/10 text-purple-600 dark:text-purple-300 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-md border border-purple-500/20">
+                          TRENDING
+                        </span>
+                      )}
+                      <span className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                        {course.language}
+                      </span>
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md">
+                        <Star className="w-3 h-3 fill-amber-500" /> {course.rating} Rating
+                      </span>
+                    </div>
+
+                    {/* Dates */}
+                    <div className="space-y-1 text-[11px] text-slate-500 dark:text-slate-400 mb-6">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3.5 h-3.5 text-purple-500" />
+                        <span>Starts on <strong>{course.startsOn}</strong></span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3.5 h-3.5 text-purple-500" />
+                        <span>Ends on <strong>{course.endsOn}</strong></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing Footer */}
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="text-2xl font-black text-purple-600 dark:text-purple-400">
+                        ₹{course.discountPrice}
+                      </span>
+                      <span className="text-xs text-slate-400 line-through">
+                        ₹{course.originalPrice}
+                      </span>
+                      <span className="ml-auto bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-emerald-500/20">
+                        🏷️ {course.discountText}
+                      </span>
+                    </div>
+                    {course.fullBatch && (
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                        (FOR FULL BATCH)
+                      </p>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <button className="py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        Explore
+                      </button>
+                      <button className="py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-xs font-bold text-white shadow-md transition">
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
 
-        {/* Client Inquiry Form Section */}
-        <div id="inquiry-form-section" className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start scroll-mt-24">
-          <div className="lg:col-span-5 space-y-6">
-            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-widest uppercase">Start Project</span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight">Ready to build your digital product?</h2>
-            <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed">
-              Submit your inquiry and we will get back to you with a formal scope of work, wireframe samples, and a customized final quotation.
+        {/* SECTION 2: CUSTOM APP ESTIMATOR & CONSULTATION FORM */}
+        <div className="mt-20 pt-16 border-t border-slate-200 dark:border-slate-800">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-widest uppercase">
+              Custom Engineering Services
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white mt-2 mb-4">
+              Project Cost Estimator & Quote Request
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Calculate your budget estimate dynamically and submit a request to our engineering team.
             </p>
-            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-900 text-xs text-slate-555 dark:text-slate-400">
-              <div className="flex items-center gap-3">
-                <div className="h-5 w-5 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-indigo-650 dark:text-indigo-400 flex items-center justify-center text-[10px] font-bold">✓</div>
-                <span>100% MSME government certified agency delivery</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-5 w-5 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-indigo-655 dark:text-indigo-400 flex items-center justify-center text-[10px] font-bold">✓</div>
-                <span>Full milestone-based delivery structure</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-5 w-5 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-indigo-655 dark:text-indigo-400 flex items-center justify-center text-[10px] font-bold">✓</div>
-                <span>Free deployments & domain setup support included</span>
-              </div>
-            </div>
           </div>
 
-          <div className="lg:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-6 sm:p-8 shadow-xl shadow-slate-100/40 dark:shadow-none transition-colors duration-300">
-            <form onSubmit={handleInquirySubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left: Interactive Estimator */}
+            <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-soft-md">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-purple-600" />
+                Select Platform & Scope
+              </h3>
+
+              <div className="space-y-6">
+                {/* Platform Types */}
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-1.5">Your Name</label>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
+                    Project Type
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { id: 'web', label: 'Web App', icon: Layout },
+                      { id: 'mobile', label: 'Mobile App', icon: Smartphone },
+                      { id: 'uiux', label: 'UI/UX Design', icon: Layers },
+                      { id: 'both', label: 'Web + Mobile', icon: Sparkles }
+                    ].map((type) => {
+                      const Icon = type.icon;
+                      return (
+                        <button
+                          key={type.id}
+                          type="button"
+                          onClick={() => setProjectType(type.id)}
+                          className={`p-3 rounded-xl border text-center transition flex flex-col items-center gap-2 ${
+                            projectType === type.id
+                              ? 'bg-purple-600/10 border-purple-600 text-purple-600 dark:text-purple-400 font-bold'
+                              : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-purple-300'
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          <span className="text-xs">{type.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Features Selection */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
+                    Features Needed
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {[
+                      { key: 'auth', label: 'User Auth & Roles' },
+                      { key: 'payments', label: 'Payment Gateway' },
+                      { key: 'admin', label: 'Admin Dashboard' },
+                      { key: 'chat', label: 'Realtime Messaging' },
+                      { key: 'notifications', label: 'Push Notifications' },
+                    ].map((feat) => (
+                      <button
+                        key={feat.key}
+                        type="button"
+                        onClick={() => handleFeatureToggle(feat.key)}
+                        className={`p-3 rounded-xl border text-left text-xs font-medium transition ${
+                          selectedFeatures[feat.key]
+                            ? 'bg-purple-600 text-white border-purple-600 shadow'
+                            : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-purple-300'
+                        }`}
+                      >
+                        {feat.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Estimated Output Price Box */}
+                <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-900/20 to-indigo-900/20 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest">Estimated Price</span>
+                    <p className="text-3xl font-black text-slate-900 dark:text-white">
+                      ₹{calculateCost().toLocaleString()}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePrefillInquiry}
+                    className="w-full sm:w-auto px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold uppercase tracking-wider shadow-lg transition flex items-center justify-center gap-2"
+                  >
+                    <span>Use Estimate In Form</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Right: Inquiry Form */}
+            <div id="inquiry-form-section" className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-soft-md">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <Send className="w-5 h-5 text-purple-600" />
+                Submit Consultation Request
+              </h3>
+
+              <form onSubmit={handleInquirySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                    Your Name
+                  </label>
                   <input
                     type="text"
                     required
                     value={inquiryForm.name}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, name: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. Priyanshu Sharma"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    placeholder="e.g. Rahul Sharma"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-1.5">Email Address</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                    Email Address
+                  </label>
                   <input
                     type="email"
                     required
                     value={inquiryForm.email}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, email: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. client@domain.com"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    placeholder="rahul@example.com"
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-1.5">Phone Number</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                    Phone Number
+                  </label>
                   <input
                     type="tel"
                     required
                     value={inquiryForm.phone}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, phone: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    placeholder="e.g. +91 9876543210"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    placeholder="9876543210"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-1.5">Service Needed</label>
-                  <select
-                    value={inquiryForm.serviceType}
-                    onChange={(e) => setInquiryForm({ ...inquiryForm, serviceType: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                  >
-                    <option>Web Development</option>
-                    <option>Mobile App</option>
-                    <option>Web + Mobile App</option>
-                    <option>UI/UX Design</option>
-                    <option>Other Services</option>
-                  </select>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                    Requirements / Notes
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={inquiryForm.description}
+                    onChange={(e) => setInquiryForm({ ...inquiryForm, description: e.target.value })}
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    placeholder="Describe your custom features or platform goals..."
+                  />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-1.5">Budget Range</label>
-                <select
-                  value={inquiryForm.budget}
-                  onChange={(e) => setInquiryForm({ ...inquiryForm, budget: e.target.value })}
-                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                >
-                  <option>₹15,000 - ₹30,000</option>
-                  <option>₹30,000 - ₹50,000</option>
-                  <option>₹50,000 - ₹1,00,000</option>
-                  <option>₹1,00,000+</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-1.5">Project Scope & Requirements</label>
-                <textarea
-                  required
-                  rows="4"
-                  value={inquiryForm.description}
-                  onChange={(e) => setInquiryForm({ ...inquiryForm, description: e.target.value })}
-                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none font-sans"
-                  placeholder="Describe your app/website ideas, business model, features required, etc..."
-                ></textarea>
-              </div>
-
-              <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg py-3.5 transition-colors shadow-md shadow-indigo-600/10 dark:shadow-none"
+                  className="w-full py-3.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition"
                 >
-                  Submit Inquiry / Book Call
+                  Send Consultation Request
                 </button>
-              </div>
-            </form>
+              </form>
+            </div>
+
           </div>
         </div>
 

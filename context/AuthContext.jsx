@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email, password, fullName, role) => {
+  const signUp = async (email, password, fullName, role, metadata = {}) => {
     if (!supabase) return { data: null, error: new Error('Supabase is not configured') };
 
     const { data, error } = await supabase.auth.signUp({
@@ -91,6 +91,7 @@ export function AuthProvider({ children }) {
         data: {
           full_name: fullName,
           role,
+          ...metadata,
         },
       },
     });
