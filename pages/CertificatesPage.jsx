@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import certificateImg from '../Certificate.jpg';
-import { Search, ShieldCheck, Download, Award, CheckCircle2, AlertCircle, Printer } from 'lucide-react';
+import { Search, ShieldCheck, Download, Award, CheckCircle2, AlertCircle, Printer, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function CertificatesPage() {
@@ -8,6 +8,7 @@ export default function CertificatesPage() {
   const [searchedId, setSearchedId] = useState('');
   const [certificateData, setCertificateData] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const mockCertificates = {
     'ATH-2026-8849': {
@@ -119,7 +120,7 @@ export default function CertificatesPage() {
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Verify Credentials</span>
                 <ShieldCheck className="w-4 h-4" />
@@ -131,7 +132,7 @@ export default function CertificatesPage() {
               <button
                 type="button"
                 onClick={() => setCertId('ATH-2026-8849')}
-                className="underline hover:text-purple-600 font-bold"
+                className="underline hover:text-purple-600 font-bold cursor-pointer"
               >
                 ATH-2026-8849
               </button>
@@ -147,6 +148,38 @@ export default function CertificatesPage() {
           </div>
         )}
 
+        {/* Official Certificate Template Card (Shown by Default & when searched) */}
+        {!certificateData && !errorMsg && (
+          <div className="max-w-4xl mx-auto space-y-6 print:hidden">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-3xl shadow-sm text-center">
+              <div className="flex items-center justify-center gap-2 mb-4 text-purple-600 dark:text-purple-400">
+                <Award className="w-6 h-6" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Official Student Certificate Format</h3>
+              </div>
+              <p className="text-xs text-slate-500 max-w-lg mx-auto mb-6">
+                Every student who completes an internship or training program at Aetherion receives this official MSME & ISO compliant certificate.
+              </p>
+              <div className="relative group max-w-2xl mx-auto overflow-hidden rounded-2xl border-4 border-purple-900/30 shadow-xl">
+                <img
+                  src={certificateImg}
+                  alt="Official Aetherion Student Certificate"
+                  className="w-full h-auto object-cover group-hover:scale-105 transition duration-500"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-4">
+                  <a
+                    href={certificateImg}
+                    download="Aetherion_Official_Certificate.jpg"
+                    className="px-4 py-2 bg-purple-600 text-white rounded-xl text-xs font-bold shadow-lg hover:bg-purple-700 transition flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download Certificate</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Certificate Display Result */}
         {certificateData && (
           <motion.div
@@ -155,68 +188,59 @@ export default function CertificatesPage() {
             className="max-w-4xl mx-auto space-y-6"
           >
             {/* Top Verification Badge Bar */}
-            <div className="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between text-emerald-600 dark:text-emerald-400 print:hidden">
+            <div className="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 text-emerald-600 dark:text-emerald-400 print:hidden">
               <div className="flex items-center gap-2 text-xs font-bold">
-                <CheckCircle2 className="w-5 h-5" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
                 <span>OFFICIALLY VERIFIED RECORD ({searchedId})</span>
               </div>
-              <button
-                onClick={handlePrint}
-                className="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 transition flex items-center gap-2 shadow"
-              >
-                <Printer className="w-4 h-4" />
-                <span>Print / Save PDF</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <a
+                  href={certificateImg}
+                  download={`Certificate_${searchedId}.jpg`}
+                  className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition flex items-center gap-2 shadow"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download Certificate Image</span>
+                </a>
+                <button
+                  onClick={handlePrint}
+                  className="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 transition flex items-center gap-2 shadow"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print / Save PDF</span>
+                </button>
+              </div>
             </div>
 
-            {/* Certificate Preview Document Container */}
-            <div className="bg-white text-slate-900 border-8 border-purple-900 p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden text-center print:border-4 print:shadow-none">
-              
-              {/* Background Watermark Symbol */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none font-serif text-[180px] font-black text-purple-900">
-                \( \tau i \)
+            {/* Official Certificate Image View */}
+            <div className="bg-white dark:bg-slate-900 border-4 border-purple-900 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-6">
+              <div className="relative overflow-hidden rounded-2xl border border-slate-200 shadow-md">
+                <img
+                  src={certificateImg}
+                  alt={`Official Certificate for ${certificateData.name}`}
+                  className="w-full h-auto object-cover"
+                />
               </div>
 
-              {/* Certificate Header */}
-              <div className="relative mb-8">
-                <div className="w-16 h-16 rounded-full bg-purple-900 text-white flex items-center justify-center mx-auto mb-4 font-serif text-2xl font-bold">
-                  \( \tau i \)
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-serif font-black uppercase tracking-widest text-purple-900">
-                  CERTIFICATE OF COMPLETION
-                </h2>
-                <p className="text-xs text-purple-700 font-bold uppercase tracking-wider mt-1">
-                  Aetherion Industrial Training & Internship Portal
-                </p>
-              </div>
-
-              {/* Body */}
-              <div className="relative space-y-4 my-8">
-                <p className="text-xs text-slate-500 font-serif italic">This is to certify that</p>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-serif underline decoration-purple-500 decoration-2 underline-offset-8">
-                  {certificateData.name}
-                </h3>
-                <p className="text-xs text-slate-600 max-w-lg mx-auto leading-relaxed">
-                  has successfully completed the industrial program in <strong>{certificateData.program}</strong> for a duration of <strong>{certificateData.duration}</strong> with grade <strong>{certificateData.grade}</strong>.
-                </p>
-              </div>
-
-              {/* Footer Meta */}
-              <div className="relative pt-8 border-t border-purple-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-4">
+              {/* Verified Details Sheet */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
                 <div>
-                  <span className="block font-bold text-slate-400 text-[10px] uppercase">Issue Date</span>
-                  <span className="font-semibold">{certificateData.issueDate}</span>
+                  <span className="block text-[10px] font-bold uppercase text-slate-400">Student Name</span>
+                  <span className="font-bold text-slate-900 dark:text-white text-sm">{certificateData.name}</span>
                 </div>
                 <div>
-                  <span className="block font-bold text-slate-400 text-[10px] uppercase">Credential ID</span>
-                  <span className="font-mono font-bold text-purple-900">{searchedId}</span>
+                  <span className="block text-[10px] font-bold uppercase text-slate-400">Program</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-400">{certificateData.program}</span>
                 </div>
                 <div>
-                  <span className="block font-bold text-slate-400 text-[10px] uppercase">Authorized Signatory</span>
-                  <span className="font-serif font-bold text-purple-900">Prince Raj (Founder)</span>
+                  <span className="block text-[10px] font-bold uppercase text-slate-400">Duration & Grade</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{certificateData.duration} ({certificateData.grade})</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold uppercase text-slate-400">Issue Date</span>
+                  <span className="font-semibold text-slate-600 dark:text-slate-400">{certificateData.issueDate}</span>
                 </div>
               </div>
-
             </div>
           </motion.div>
         )}

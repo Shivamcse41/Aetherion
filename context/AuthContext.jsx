@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase, isSupabaseConfigured } from '../supabaseClient';
 import { ensureUserProfile } from '../lib/profileService';
 
@@ -8,14 +8,16 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(null);
 
-  const fetchProfile = async (userId, currentUser) => {
+  const fetchProfile = useCallback(async (userId, currentUser) => {
     if (!supabase) {
       setLoading(false);
       return;
     }
 
     try {
+      setAuthError(null);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -27,7 +29,10 @@ export function AuthProvider({ children }) {
       if (data) {
         setProfile(data);
       } else if (currentUser) {
-        const { data: created } = await ensureUserProfile(currentUser);
+        const { data: created, error: createError } = await ensureUserProfile(currentUser);
+        if (createError) {
+          console.warn('Profile auto-creation warning:', createError.message);
+        }
         setProfile(
           created || {
             id: userId,
@@ -38,6 +43,7 @@ export function AuthProvider({ children }) {
       }
     } catch (err) {
       console.error('Error fetching profile:', err.message);
+      setAuthError(err.message || 'Failed to load user profile. Working in fallback mode.');
       if (currentUser) {
         setProfile({
           id: userId,
@@ -48,7 +54,14 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  const retryFetchProfile = useCallback(() => {
+    if (user) {
+      setLoading(true);
+      fetchProfile(user.id, user);
+    }
+  }, [user, fetchProfile]);
 
   useEffect(() => {
     if (!supabase) {
@@ -78,7 +91,7 @@ export function AuthProvider({ children }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchProfile]);
 
   const signUp = async (email, password, fullName, role, metadata = {}) => {
     if (!supabase) return { data: null, error: new Error('Supabase is not configured') };
@@ -137,6 +150,8 @@ export function AuthProvider({ children }) {
         user,
         profile,
         loading,
+        authError,
+        retryFetchProfile,
         isSupabaseConfigured,
         signUp,
         signIn,

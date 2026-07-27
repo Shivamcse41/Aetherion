@@ -22,15 +22,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
   
-  const { user, signUp, signIn, signInWithGoogle, isSupabaseConfigured } = useAuth();
+  const { user, profile, signUp, signIn, signInWithGoogle, isSupabaseConfigured } = useAuth();
   const navigate = useNavigate();
-
-  // Redirect if already logged in
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
 
   const handleGoogleSignIn = async () => {
     if (!acknowledged) {
@@ -58,13 +51,40 @@ export default function LoginPage() {
     setLoading(true);
     setMessage({ text: '', type: '' });
 
+    const cleanEmail = (formData.email || '').trim().toLowerCase();
+
     try {
       if (isLogin) {
-        // Sign In
-        const { error } = await signIn(formData.email, formData.password);
-        if (error) throw error;
-        setMessage({ text: 'Logged in successfully! Redirecting...', type: 'success' });
-        setTimeout(() => navigate('/'), 1500);
+        // Master admin passcode check (admin@aetherion.com / Admin@2026 or Company Admin login)
+        if (cleanEmail === 'admin@aetherion.com' && formData.password === 'Admin@2026') {
+          localStorage.setItem('admin_session', 'true');
+          setMessage({ text: 'Admin authenticated! Redirecting to Admin Dashboard...', type: 'success' });
+          setTimeout(() => navigate('/admin'), 1000);
+          return;
+        }
+
+        // Sign In via Supabase
+        const { data, error } = await signIn(formData.email, formData.password);
+
+        if (error) {
+          if (cleanEmail === 'admin@aetherion.com' && formData.password === 'Admin@2026') {
+            localStorage.setItem('admin_session', 'true');
+            setMessage({ text: 'Admin authenticated! Redirecting to Admin Dashboard...', type: 'success' });
+            setTimeout(() => navigate('/admin'), 1000);
+            return;
+          }
+          throw error;
+        }
+
+        const isAdmin = data?.user?.user_metadata?.role === 'Admin' || formData.role === 'Company';
+        if (isAdmin) {
+          localStorage.setItem('admin_session', 'true');
+          setMessage({ text: 'Admin authenticated! Redirecting to Admin Dashboard...', type: 'success' });
+          setTimeout(() => navigate('/admin'), 1000);
+        } else {
+          setMessage({ text: 'Logged in successfully! Redirecting...', type: 'success' });
+          setTimeout(() => navigate('/'), 1500);
+        }
       } else {
         // Sign Up
         const metadata = formData.role === 'Student' ? {
@@ -73,13 +93,15 @@ export default function LoginPage() {
           course: formData.course,
           grad_year: formData.gradYear,
           resume_link: formData.resumeLink,
-        } : {};
+        } : {
+          role: 'Admin'
+        };
 
         const { data, error } = await signUp(
           formData.email,
           formData.password,
           formData.name,
-          formData.role,
+          formData.role === 'Company' ? 'Admin' : formData.role,
           metadata
         );
         if (error) throw error;
@@ -90,8 +112,14 @@ export default function LoginPage() {
             type: 'success'
           });
         } else {
-          setMessage({ text: 'Registration successful! Redirecting...', type: 'success' });
-          setTimeout(() => navigate('/'), 1500);
+          if (formData.role === 'Company') {
+            localStorage.setItem('admin_session', 'true');
+            setMessage({ text: 'Company Admin account created! Redirecting...', type: 'success' });
+            setTimeout(() => navigate('/admin'), 1500);
+          } else {
+            setMessage({ text: 'Registration successful! Redirecting...', type: 'success' });
+            setTimeout(() => navigate('/'), 1500);
+          }
         }
       }
     } catch (err) {

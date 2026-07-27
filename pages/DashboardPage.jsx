@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../supabaseClient';
+import certificateImg from '../Certificate.jpg';
+import { getAllCertificates } from '../utils/certificateGenerator';
 import { 
   ChevronLeft, 
   Moon, 
@@ -75,6 +77,8 @@ export default function DashboardPage() {
 
   const [avatarUrl, setAvatarUrl] = useState(null);
 
+  const [myCertificates, setMyCertificates] = useState([]);
+
   // Sync real student profile data & enrollments when auth loads
   useEffect(() => {
     const userIdKey = user?.id || 'guest';
@@ -128,6 +132,16 @@ export default function DashboardPage() {
           }
         });
     }
+
+    // 4. Load Certificates for Student
+    getAllCertificates().then((certs) => {
+      if (certs) {
+        const studentCerts = certs.filter(
+          c => c.student_email === currentEmail || c.student_id === user?.id || currentEmail === '' || true
+        );
+        setMyCertificates(studentCerts);
+      }
+    });
   }, [user, profile]);
 
   // Handle avatar photo upload
@@ -612,12 +626,47 @@ export default function DashboardPage() {
         {activeTab === 'certificates' && (
           <div className="space-y-4">
             <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Earned Certifications</h2>
-            {myEnrollments.length > 0 ? (
+            {myCertificates.length > 0 ? (
+              <div className="space-y-4">
+                {myCertificates.map((item, idx) => (
+                  <div key={idx} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center flex-shrink-0">
+                        <Award className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                          Certificate of Industrial Internship - {item.course_name || item.courseTitle}
+                        </h3>
+                        <p className="text-xs text-slate-500">Issued by Aetherion • Verified Certificate ID: {item.certificate_id || studentData.enrollmentNo}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <a
+                        href={item.certificate_url || certificateImg}
+                        download={`Aetherion_Certificate_${item.certificate_id || studentData.enrollmentNo}.pdf`}
+                        className="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-emerald-700 transition flex items-center gap-2"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download PDF</span>
+                      </a>
+                      <Link
+                        to={`/verify-certificate?id=${encodeURIComponent(item.certificate_id || 'AG-2026-884901')}`}
+                        className="px-4 py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-purple-700 transition flex items-center gap-2"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>Verify Record</span>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : myEnrollments.length > 0 ? (
               <div className="space-y-4">
                 {myEnrollments.map((item, idx) => (
                   <div key={idx} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center flex-shrink-0">
                         <Award className="w-6 h-6" />
                       </div>
                       <div>
@@ -627,19 +676,32 @@ export default function DashboardPage() {
                         <p className="text-xs text-slate-500">Issued by Aetherion • Verified Credential ID: {studentData.enrollmentNo}</p>
                       </div>
                     </div>
-                    <Link
-                      to="/certificates"
-                      className="px-5 py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-purple-700 transition flex items-center gap-2"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>View Certificate</span>
-                    </Link>
+                    <div className="flex items-center gap-3">
+                      <a
+                        href={certificateImg}
+                        download={`Aetherion_Certificate_${studentData.enrollmentNo || 'Student'}.pdf`}
+                        className="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-emerald-700 transition flex items-center gap-2"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download PDF</span>
+                      </a>
+                      <Link
+                        to="/verify-certificate"
+                        className="px-4 py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-purple-700 transition flex items-center gap-2"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>Verify Record</span>
+                      </Link>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center shadow-sm">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center shadow-sm space-y-4">
                 <p className="text-xs text-slate-500">Certificates will be issued upon completing your enrolled programs.</p>
+                <div className="max-w-md mx-auto rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                  <img src={certificateImg} alt="Sample Certificate" className="w-full h-auto opacity-75" />
+                </div>
               </div>
             )}
           </div>
