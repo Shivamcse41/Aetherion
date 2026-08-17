@@ -82,7 +82,7 @@ export default function CertificatesPage() {
   };
 
   return (
-    <main className="py-12 md:py-20 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300 print:bg-white print:py-0 print:text-black">
+    <main className="py-12 md:py-20 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300 print:bg-white print:py-0 print:text-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 print:p-0">
         
         {/* Header */}
@@ -113,7 +113,7 @@ export default function CertificatesPage() {
                     value={certId}
                     onChange={(e) => setCertId(e.target.value)}
                     placeholder="e.g. ATH-2026-8849"
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs font-mono text-slate-900 dark:text-white uppercase focus:outline-none focus:border-purple-600"
+                    className="w-full border border-slate-200 dark:border-slate-800 rounded-2xl pl-11 pr-4 py-3 text-xs font-mono text-slate-900 dark:text-white uppercase focus:outline-none focus:border-purple-600"
                   />
                 </div>
               </div>
@@ -223,7 +223,7 @@ export default function CertificatesPage() {
               </div>
 
               {/* Verified Details Sheet */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
                 <div>
                   <span className="block text-[10px] font-bold uppercase text-slate-400">Student Name</span>
                   <span className="font-bold text-slate-900 dark:text-white text-sm">{certificateData.name}</span>

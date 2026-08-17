@@ -435,7 +435,7 @@ export default function InternshipPage() {
   );
 
   return (
-    <main className="py-12 md:py-20 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+    <main className="py-12 md:py-20 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Hero Header */}
@@ -598,7 +598,7 @@ export default function InternshipPage() {
                     required
                     value={inquiryForm.name}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, name: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    className="w-full border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
                     placeholder="Shivam Kumar"
                   />
                 </div>
@@ -610,7 +610,7 @@ export default function InternshipPage() {
                     required
                     value={inquiryForm.email}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, email: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    className="w-full border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
                     placeholder="shivam@example.com"
                   />
                 </div>
@@ -622,7 +622,7 @@ export default function InternshipPage() {
                     required
                     value={inquiryForm.phone}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, phone: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    className="w-full border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
                     placeholder="9876543210"
                   />
                 </div>
@@ -634,7 +634,7 @@ export default function InternshipPage() {
                     required
                     value={inquiryForm.college}
                     onChange={(e) => setInquiryForm({ ...inquiryForm, college: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    className="w-full border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
                     placeholder="Aetherion Institute of Tech"
                   />
                 </div>
@@ -656,7 +656,7 @@ export default function InternshipPage() {
                             className={`p-2.5 text-center rounded-xl border transition flex flex-col items-center justify-center gap-0.5 ${
                               isSelected
                                 ? 'bg-purple-600 text-white border-purple-600 shadow-md scale-[1.02]'
-                                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:border-purple-400'
+                                : 'border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-purple-400'
                             }`}
                           >
                             <span className="text-[11px] font-bold">{dur}</span>

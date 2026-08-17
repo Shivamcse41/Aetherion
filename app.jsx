@@ -6,6 +6,7 @@ import AdminProtectedRoute from './components/AdminProtectedRoute';
 import AdminLayout from './components/admin/AdminLayout';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import BackgroundAnimation from './components/BackgroundAnimation';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -54,9 +55,13 @@ function PageLoader() {
 
 function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 scroll-smooth flex flex-col justify-between">
+    <div className="min-h-screen text-slate-900 dark:text-slate-100 transition-colors duration-300 scroll-smooth flex flex-col justify-between relative overflow-x-hidden">
+      {/* Base background color layer — sits behind animation canvas */}
+      <div className="fixed inset-0 bg-slate-50 dark:bg-slate-950 z-[-1]" />
+      {/* Animated particle + nebula background */}
+      <BackgroundAnimation />
       <Navbar />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow relative z-10">{children}</main>
       <Footer />
     </div>
   );

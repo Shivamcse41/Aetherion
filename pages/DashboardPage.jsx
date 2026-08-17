@@ -36,7 +36,7 @@ export default function DashboardPage() {
   // Lock Student Dashboard if student is not logged in
   if (!user) {
     return (
-      <main className="py-20 md:py-28 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+      <main className="py-20 md:py-28 text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 sm:p-10 rounded-3xl shadow-soft-lg space-y-6">
           <div className="w-16 h-16 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-purple-500/20">
             <ShieldCheck className="w-8 h-8 text-purple-600 dark:text-purple-400" />
@@ -191,7 +191,7 @@ export default function DashboardPage() {
   const firstName = displayName.split(' ')[0] || 'Student';
 
   return (
-    <main className="py-6 sm:py-10 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+    <main className="py-6 sm:py-10 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Top Header Bar */}
